@@ -1,0 +1,11 @@
+{
+  "name": "my-website",
+  "compatibility_date": "2026-08-31",
+  "workers_dev": false,
+  "assets": {
+    "directory": "./"
+  },
+  "routes": [
+    { "pattern": "20091013.xyz", "custom_domain": true }
+  ]
+}
