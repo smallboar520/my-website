@@ -1,67 +1,300 @@
-<!DOCTYPE html>
-<html lang="zh-CN">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>旮旯恋语 · Galgame</title>
-  <link rel="stylesheet" href="style.css">
-</head>
-<body>
-  <div id="app">
+/* ============================================================
+ * style.css —— 旮旯恋语 · Galgame 样式
+ * ============================================================ */
 
-    <!-- 顶部好感度栏 -->
-    <header id="favor-bar" class="hidden"></header>
+* { margin: 0; padding: 0; box-sizing: border-box; }
 
-    <!-- 开始界面 -->
-    <section id="screen-title" class="screen">
-      <div class="title-box">
-        <h1 class="game-title">旮旯恋语</h1>
-        <p class="game-subtitle">—— 三段不同的相遇，由你的选择决定结局 ——</p>
-        <button id="btn-start" class="primary-btn">开始游戏</button>
-        <p class="game-tip">攻略全部三位角色即可通关；失去两位则游戏失败。</p>
-      </div>
-    </section>
+:root {
+  --bg: #14101f;
+  --bg2: #1e1830;
+  --panel: rgba(38, 30, 60, 0.92);
+  --accent: #ff7eb6;
+  --accent2: #9d7bff;
+  --text: #f2eefc;
+  --text-dim: #b3a8cf;
+  --danger: #ff6b6b;
+  --radius: 14px;
+}
 
-    <!-- 角色选择界面 -->
-    <section id="screen-select" class="screen hidden">
-      <h2 class="section-title">选择你想接近的人</h2>
-      <div id="char-grid"></div>
-    </section>
+body {
+  background: radial-gradient(circle at 20% 10%, #2a2145 0%, var(--bg) 60%);
+  color: var(--text);
+  font-family: "PingFang SC", "Microsoft YaHei", "Hiragino Sans GB", sans-serif;
+  min-height: 100vh;
+}
 
-    <!-- 对话界面 -->
-    <section id="screen-dialogue" class="screen hidden">
-      <div class="dialogue-stage">
-        <img id="dlg-avatar" class="dlg-avatar" src="" alt="">
-        <div class="dialogue-box">
-          <div id="dlg-name" class="dlg-name"></div>
-          <p id="dlg-text" class="dlg-text"></p>
-          <div id="dlg-options" class="dlg-options"></div>
-        </div>
-      </div>
-      <button id="btn-back-select" class="ghost-btn">← 返回选择角色</button>
-    </section>
+#app { max-width: 960px; margin: 0 auto; padding: 16px; }
 
-    <!-- 结算界面 -->
-    <section id="screen-end" class="screen hidden">
-      <div class="title-box">
-        <h1 id="end-title" class="game-title"></h1>
-        <p id="end-desc" class="game-subtitle"></p>
-        <button id="btn-restart" class="primary-btn">重新开始</button>
-      </div>
-    </section>
+.hidden { display: none !important; }
 
-    <!-- 单人成功/失败弹窗 -->
-    <div id="overlay" class="hidden">
-      <div class="overlay-box">
-        <p id="overlay-text"></p>
-        <button id="overlay-btn" class="primary-btn">继续</button>
-      </div>
-    </div>
+/* ---------- 好感度栏 ---------- */
+#favor-bar {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin-bottom: 18px;
+}
 
-  </div>
+.favor-panel {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: var(--panel);
+  border: 1px solid rgba(157, 123, 255, 0.25);
+  border-radius: var(--radius);
+  padding: 8px 14px;
+  min-width: 200px;
+  flex: 1;
+  max-width: 300px;
+  transition: opacity .3s, border-color .3s;
+}
+.favor-panel.status-success { border-color: var(--accent); }
+.favor-panel.status-failed { opacity: .45; filter: grayscale(.8); }
 
-  <script src="js/data.js"></script>
-  <script src="js/game.js"></script>
-  <script src="js/main.js"></script>
-</body>
-</html>
+.favor-avatar {
+  width: 44px; height: 44px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid var(--accent2);
+}
+.favor-info { flex: 1; }
+.favor-name { font-size: 14px; font-weight: 600; margin-bottom: 4px; }
+.favor-track {
+  height: 8px;
+  background: rgba(255,255,255,.12);
+  border-radius: 4px;
+  overflow: hidden;
+}
+.favor-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--accent2), var(--accent));
+  border-radius: 4px;
+  transition: width .4s ease;
+}
+.favor-num { font-size: 12px; color: var(--text-dim); margin-top: 3px; }
+
+.tag { font-size: 11px; padding: 1px 6px; border-radius: 8px; }
+.tag-success { background: var(--accent); color: #fff; }
+.tag-failed { background: var(--danger); color: #fff; }
+
+/* 好感度飘字 */
+.favor-float {
+  position: absolute;
+  right: 12px; top: 4px;
+  font-weight: 700;
+  font-size: 18px;
+  animation: floatUp 1.2s ease-out forwards;
+  pointer-events: none;
+}
+.favor-float.up { color: var(--accent); }
+.favor-float.down { color: var(--danger); }
+@keyframes floatUp {
+  0% { opacity: 0; transform: translateY(6px); }
+  20% { opacity: 1; }
+  100% { opacity: 0; transform: translateY(-26px); }
+}
+
+/* ---------- 通用屏幕 ---------- */
+.screen { animation: fadeIn .35s ease; }
+@keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; } }
+
+.section-title {
+  text-align: center;
+  font-size: 22px;
+  margin-bottom: 20px;
+  color: var(--text);
+  letter-spacing: 2px;
+}
+
+/* ---------- 开始 / 结算界面 ---------- */
+#screen-title, #screen-end {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 80vh;
+}
+.title-box { text-align: center; }
+.game-title {
+  font-size: 46px;
+  letter-spacing: 8px;
+  background: linear-gradient(90deg, var(--accent), var(--accent2));
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  margin-bottom: 16px;
+}
+.game-subtitle { color: var(--text-dim); margin-bottom: 32px; }
+.game-tip { margin-top: 24px; font-size: 13px; color: var(--text-dim); }
+#screen-end.victory .game-title { background: linear-gradient(90deg, #ffd166, var(--accent)); -webkit-background-clip: text; background-clip: text; }
+#screen-end.defeat .game-title { color: var(--danger); background: none; -webkit-text-fill-color: var(--danger); }
+
+/* ---------- 按钮 ---------- */
+.primary-btn {
+  background: linear-gradient(90deg, var(--accent), var(--accent2));
+  color: #fff;
+  border: none;
+  padding: 14px 46px;
+  font-size: 18px;
+  border-radius: 999px;
+  cursor: pointer;
+  letter-spacing: 3px;
+  transition: transform .15s, box-shadow .15s;
+}
+.primary-btn:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(255,126,182,.4); }
+.primary-btn:active { transform: translateY(0); }
+
+.ghost-btn {
+  display: block;
+  margin: 18px auto 0;
+  background: transparent;
+  color: var(--text-dim);
+  border: 1px solid rgba(255,255,255,.2);
+  padding: 8px 20px;
+  border-radius: 999px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: color .15s, border-color .15s;
+}
+.ghost-btn:hover { color: var(--text); border-color: var(--accent2); }
+
+/* ---------- 角色选择 ---------- */
+#char-grid {
+  display: flex;
+  gap: 18px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+.char-card {
+  background: var(--panel);
+  border: 1px solid rgba(157,123,255,.25);
+  border-radius: var(--radius);
+  padding: 18px;
+  width: 240px;
+  cursor: pointer;
+  color: var(--text);
+  font-family: inherit;
+  text-align: center;
+  transition: transform .18s, box-shadow .18s, border-color .18s;
+}
+.char-card:hover:not(:disabled) {
+  transform: translateY(-5px);
+  border-color: var(--accent);
+  box-shadow: 0 10px 26px rgba(0,0,0,.45);
+}
+.char-card:disabled { cursor: default; }
+.char-card.status-failed { opacity: .45; filter: grayscale(.8); }
+.char-card.status-success { border-color: var(--accent); }
+
+.char-img {
+  width: 150px; height: 150px;
+  object-fit: cover;
+  border-radius: 50%;
+  border: 3px solid var(--accent2);
+  margin-bottom: 12px;
+}
+.char-name { font-size: 20px; font-weight: 700; margin-bottom: 6px; }
+.char-intro { font-size: 13px; color: var(--text-dim); min-height: 38px; margin-bottom: 10px; }
+.char-status { font-size: 14px; color: var(--accent); }
+
+/* ---------- 对话界面 ---------- */
+.dialogue-stage {
+  display: flex;
+  align-items: flex-end;
+  gap: 0;
+  margin-top: 10px;
+}
+.dlg-avatar {
+  width: 240px;
+  height: auto;
+  max-height: 340px;
+  object-fit: cover;
+  border-radius: var(--radius) var(--radius) 0 0;
+  border: 2px solid rgba(157,123,255,.4);
+  border-bottom: none;
+  flex-shrink: 0;
+}
+.dialogue-box {
+  flex: 1;
+  background: var(--panel);
+  border: 1px solid rgba(157,123,255,.35);
+  border-radius: var(--radius);
+  padding: 20px 24px;
+  min-height: 300px;
+  margin-left: -14px;
+  position: relative;
+  z-index: 1;
+  backdrop-filter: blur(4px);
+}
+.dlg-name {
+  display: inline-block;
+  font-size: 17px;
+  font-weight: 700;
+  color: var(--accent);
+  border: 1px solid var(--accent);
+  padding: 3px 14px;
+  border-radius: 999px;
+  margin-bottom: 14px;
+}
+.dlg-text {
+  font-size: 17px;
+  line-height: 1.8;
+  margin-bottom: 22px;
+  min-height: 64px;
+}
+.dlg-options { display: flex; flex-direction: column; gap: 10px; }
+.option-btn {
+  background: rgba(255,255,255,.06);
+  border: 1px solid rgba(255,255,255,.18);
+  color: var(--text);
+  text-align: left;
+  padding: 12px 18px;
+  border-radius: 10px;
+  font-size: 15px;
+  font-family: inherit;
+  cursor: pointer;
+  transition: background .15s, border-color .15s, transform .1s;
+}
+.option-btn:hover {
+  background: rgba(255,126,182,.16);
+  border-color: var(--accent);
+  transform: translateX(4px);
+}
+.option-btn:active { transform: translateX(4px) scale(.99); }
+
+/* ---------- 弹窗 ---------- */
+#overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(10, 6, 20, .75);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 99;
+  animation: fadeIn .3s ease;
+}
+.overlay-box {
+  background: var(--bg2);
+  border: 1px solid var(--accent2);
+  border-radius: var(--radius);
+  padding: 40px 60px;
+  text-align: center;
+}
+.overlay-box p { font-size: 24px; margin-bottom: 26px; }
+
+/* ---------- 手机适配 ---------- */
+@media (max-width: 640px) {
+  .game-title { font-size: 32px; letter-spacing: 4px; }
+  .dialogue-stage { flex-direction: column; align-items: center; }
+  .dlg-avatar {
+    width: 160px;
+    max-height: 200px;
+    border-radius: var(--radius);
+    border-bottom: 2px solid rgba(157,123,255,.4);
+    margin-bottom: -12px;
+  }
+  .dialogue-box { margin-left: 0; width: 100%; min-height: 260px; }
+  .favor-panel { min-width: 150px; }
+  .char-card { width: 100%; max-width: 300px; }
+}
