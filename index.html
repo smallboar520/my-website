@@ -1,19 +1,67 @@
-<!doctype html>
-<html>
+<!DOCTYPE html>
+<html lang="zh-CN">
 <head>
-<meta charset="UTF-8">
-<title>Lifeng.Qiu</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>旮旯恋语 · Galgame</title>
+  <link rel="stylesheet" href="style.css">
 </head>
-
 <body>
-	<h1 align="center">看到自己名字的这辈子有了</h1>
-	<p>江敬春我cnm</p>
-	<p>郑恩恒去🇰🇷的机票钱可以给我垫一下吗</p>
-	<p>阿浦9.3借5元没还</p>
-	<p>将军喜欢假小子</p>
-	<p>欧阳去剿匪了</p>
-	<p>水牛🐮是sb</p>
-	<p>强调一下满穗是我的牛牛受着吧</p>
-	<p>想法秋月 想法雄鹰 想法秀娟</p>
+  <div id="app">
+
+    <!-- 顶部好感度栏 -->
+    <header id="favor-bar" class="hidden"></header>
+
+    <!-- 开始界面 -->
+    <section id="screen-title" class="screen">
+      <div class="title-box">
+        <h1 class="game-title">旮旯恋语</h1>
+        <p class="game-subtitle">—— 三段不同的相遇，由你的选择决定结局 ——</p>
+        <button id="btn-start" class="primary-btn">开始游戏</button>
+        <p class="game-tip">攻略全部三位角色即可通关；失去两位则游戏失败。</p>
+      </div>
+    </section>
+
+    <!-- 角色选择界面 -->
+    <section id="screen-select" class="screen hidden">
+      <h2 class="section-title">选择你想接近的人</h2>
+      <div id="char-grid"></div>
+    </section>
+
+    <!-- 对话界面 -->
+    <section id="screen-dialogue" class="screen hidden">
+      <div class="dialogue-stage">
+        <img id="dlg-avatar" class="dlg-avatar" src="" alt="">
+        <div class="dialogue-box">
+          <div id="dlg-name" class="dlg-name"></div>
+          <p id="dlg-text" class="dlg-text"></p>
+          <div id="dlg-options" class="dlg-options"></div>
+        </div>
+      </div>
+      <button id="btn-back-select" class="ghost-btn">← 返回选择角色</button>
+    </section>
+
+    <!-- 结算界面 -->
+    <section id="screen-end" class="screen hidden">
+      <div class="title-box">
+        <h1 id="end-title" class="game-title"></h1>
+        <p id="end-desc" class="game-subtitle"></p>
+        <button id="btn-restart" class="primary-btn">重新开始</button>
+      </div>
+    </section>
+
+    <!-- 单人成功/失败弹窗 -->
+    <div id="overlay" class="hidden">
+      <div class="overlay-box">
+        <p id="overlay-text"></p>
+        <button id="overlay-btn" class="primary-btn">继续</button>
+      </div>
+    </div>
+
+  </div>
+
+  <script src="js/data.js"></script>
+  <script src="js/game.js"></script>
+  <script src="js/main.js"></script>
 </body>
 </html>
