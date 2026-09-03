@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>旮旯恋语 · Galgame</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div id="app">
+
+    <!-- 顶部好感度栏 -->
+    <header id="favor-bar" class="hidden"></header>
+
+    <!-- 开始界面 -->
+    <section id="screen-title" class="screen">
+      <div class="title-box">
+        <h1 class="game-title">旮旯恋语</h1>
+        <p class="game-subtitle">—— 三段不同的相遇，由你的选择决定结局 ——</p>
+        <button id="btn-start" class="primary-btn">开始游戏</button>
+        <p class="game-tip">攻略全部三位角色即可通关；失去两位则游戏失败。</p>
+      </div>
+    </section>
+
+    <!-- 角色选择界面 -->
+    <section id="screen-select" class="screen hidden">
+      <h2 class="section-title">选择你想接近的人</h2>
+      <div id="char-grid"></div>
+    </section>
+
+    <!-- 对话界面 -->
+    <section id="screen-dialogue" class="screen hidden">
+      <div class="dialogue-stage">
+        <img id="dlg-avatar" class="dlg-avatar" src="" alt="">
+        <div class="dialogue-box">
+          <div id="dlg-name" class="dlg-name"></div>
+          <p id="dlg-text" class="dlg-text"></p>
+          <div id="dlg-options" class="dlg-options"></div>
+        </div>
+      </div>
+      <button id="btn-back-select" class="ghost-btn">← 返回选择角色</button>
+    </section>
+
+    <!-- 结算界面 -->
+    <section id="screen-end" class="screen hidden">
+      <div class="title-box">
+        <h1 id="end-title" class="game-title"></h1>
+        <p id="end-desc" class="game-subtitle"></p>
+        <button id="btn-restart" class="primary-btn">重新开始</button>
+      </div>
+    </section>
+
+    <!-- 单人成功/失败弹窗 -->
+    <div id="overlay" class="hidden">
+      <div class="overlay-box">
+        <p id="overlay-text"></p>
+        <button id="overlay-btn" class="primary-btn">继续</button>
+      </div>
+    </div>
+
+  </div>
+
+  <script src="js/data.js"></script>
+  <script src="js/game.js"></script>
+  <script src="js/main.js"></script>
+</body>
+</html>
