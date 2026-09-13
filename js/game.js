@@ -90,15 +90,21 @@ const GameCore = (function () {
     return { delta: option.favor, favor, charEvent, gameEvent: checkGameEnd(state) };
   }
 
-  /** 检查整局游戏是否结束：'victory' | 'gameover' | 'none' */
+  /**
+   * 检查整局游戏是否结束：'victory' | 'gameover' | 'none'
+   * v1.1 修复：原先必须三人全部成功才算胜利，导致「一人失败 +
+   * 两人成功」时既不算赢也不算输，直接卡关。现在规则为：
+   *   - 失败人数达到 FAIL_LIMIT → 游戏失败；
+   *   - 其余情况，只要没有仍在攻略中的角色 → 游戏胜利。
+   */
   function checkGameEnd(state) {
     const statuses = CHARACTER_ORDER.map((id) => state.status[id]);
-    if (statuses.every((s) => s === "success")) return "victory";
     if (statuses.filter((s) => s === "failed").length >= FAIL_LIMIT) return "gameover";
+    if (statuses.every((s) => s !== "active")) return "victory";
     return "none";
   }
 
-  return { FAVOR_MIN, FAVOR_MAX, FAIL_LIMIT, createState, getNode, applyChoice, checkGameEnd };
+  return { FAVOR_MIN, FAVOR_MAX, FAIL_LIMIT, createState, getNode, applyChoice, advanceStory: advance, checkGameEnd };
 })();
 
 // 兼容 Node 环境（用于自动化测试），浏览器中直接忽略
