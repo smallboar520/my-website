@@ -206,14 +206,13 @@ body {
   margin-top: 10px;
 }
 .dlg-avatar {
-  width: 240px;
-  height: auto;
-  max-height: 340px;
+  width: 130px;
+  height: 130px;
   object-fit: cover;
-  border-radius: var(--radius) var(--radius) 0 0;
+  border-radius: var(--radius);
   border: 2px solid rgba(157,123,255,.4);
-  border-bottom: none;
   flex-shrink: 0;
+  align-self: flex-end;
 }
 .dialogue-box {
   flex: 1;
@@ -221,8 +220,8 @@ body {
   border: 1px solid rgba(157,123,255,.35);
   border-radius: var(--radius);
   padding: 20px 24px;
-  min-height: 300px;
-  margin-left: -14px;
+  min-height: 220px;
+  margin-left: 12px;
   position: relative;
   z-index: 1;
   backdrop-filter: blur(4px);
@@ -297,4 +296,121 @@ body {
   .dialogue-box { margin-left: 0; width: 100%; min-height: 260px; }
   .favor-panel { min-width: 150px; }
   .char-card { width: 100%; max-width: 300px; }
+}
+
+/* ---------- v1.1 场景图片 ---------- */
+.dlg-scene-wrap {
+  position: relative;
+  margin: 0 auto 14px;
+  z-index: 0;
+  border-radius: var(--radius);
+  overflow: hidden;
+  border: 2px solid rgba(157,123,255,.4);
+  background: #0c0916;
+}
+.dlg-scene {
+  display: block;
+  width: 100%;
+  height: auto;
+  max-height: 72vh;
+  object-fit: contain;
+}
+.scene-fade { animation: sceneFade .6s ease; }
+@keyframes sceneFade {
+  from { opacity: 0; filter: brightness(.6); }
+  to { opacity: 1; filter: brightness(1); }
+}
+.scene-tag {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  background: rgba(20, 16, 31, .72);
+  border: 1px solid var(--accent2);
+  color: var(--text);
+  font-size: 13px;
+  padding: 4px 12px;
+  border-radius: 999px;
+  backdrop-filter: blur(3px);
+  z-index: 2;
+}
+.dialogue-stage { position: relative; z-index: 1; }
+
+/* 对话框融入场景图（有场景时由 JS 移入图片容器） */
+.dlg-scene-wrap.overlay-mode .dialogue-stage {
+  position: absolute;
+  left: 12px;
+  right: 12px;
+  bottom: 12px;
+  margin-top: 0;
+  max-height: 92%; /* 兜底，实际由 JS 按像素精确限制 */
+}
+.dlg-scene-wrap.overlay-mode .dialogue-box {
+  background: rgba(24, 18, 42, .2); /* 高透明度，融入场景 */
+  backdrop-filter: blur(6px);
+  min-height: 0;
+  max-height: 92%; /* 兜底，实际由 JS 按像素精确限制 */
+  overflow-y: auto;
+}
+.dlg-scene-wrap.overlay-mode .dlg-text,
+.dlg-scene-wrap.overlay-mode .option-btn {
+  text-shadow: 0 1px 4px rgba(0, 0, 0, .9); /* 透明背景下保证可读性 */
+}
+.dlg-scene-wrap.overlay-mode .option-btn {
+  background: rgba(20, 14, 36, .22);
+}
+.dlg-scene-wrap.overlay-mode .option-btn:hover {
+  background: rgba(255, 126, 182, .28);
+}
+.dlg-scene-wrap.overlay-mode .dlg-avatar {
+  width: 88px;
+  height: 88px;
+  box-shadow: 0 4px 16px rgba(0,0,0,.5);
+}
+
+/* ---------- v1.1 旁白 & 点击继续 ---------- */
+.dlg-name.narrator {
+  color: var(--accent2);
+  border-color: var(--accent2);
+}
+.continue-btn {
+  text-align: center;
+  color: var(--accent);
+  border-color: rgba(255,126,182,.5);
+  animation: pulse 1.6s ease-in-out infinite;
+}
+@keyframes pulse {
+  0%, 100% { opacity: .75; }
+  50% { opacity: 1; }
+}
+
+/* ---------- v1.1 版本信息 ---------- */
+.game-meta {
+  margin-top: 14px;
+  font-size: 12px;
+  letter-spacing: 2px;
+  color: rgba(179, 168, 207, .7);
+}
+
+/* ---------- 手机适配补充 ---------- */
+@media (max-width: 640px) {
+  .dlg-scene { max-height: 60vh; }
+  .scene-tag { font-size: 11px; padding: 3px 10px; }
+  .dialogue-stage { flex-direction: row !important; align-items: flex-end !important; }
+  .dlg-avatar {
+    width: 76px !important;
+    height: 76px !important;
+    max-height: none !important;
+    border-radius: 12px !important;
+    border-bottom: 2px solid rgba(157,123,255,.4) !important;
+    margin-bottom: 0 !important;
+  }
+  .dialogue-box { margin-left: 10px !important; min-height: 0 !important; }
+  .dlg-scene-wrap.overlay-mode .dialogue-stage { left: 8px; right: 8px; bottom: 8px; }
+  .dlg-scene-wrap.overlay-mode .dialogue-box { padding: 12px 14px; }
+  .dlg-scene-wrap.overlay-mode .dlg-avatar { display: none; } /* 手机端隐藏头像，对话框占满宽度避免滚动 */
+  .dlg-scene-wrap.overlay-mode .dialogue-box { margin-left: 0 !important; }
+  .dlg-scene-wrap.overlay-mode .dlg-name { font-size: 14px; padding: 2px 10px; margin-bottom: 8px; }
+  .dlg-scene-wrap.overlay-mode .dlg-text { font-size: 14px; line-height: 1.6; margin-bottom: 10px; min-height: 0; }
+  .dlg-scene-wrap.overlay-mode .dlg-options { gap: 7px; }
+  .dlg-scene-wrap.overlay-mode .option-btn { font-size: 13px; padding: 9px 12px; }
 }
